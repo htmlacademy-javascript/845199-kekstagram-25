@@ -1,14 +1,29 @@
+/**
+ * функция возвращает случайное число из диапазона
+ * @param {int} min - минимальное число в диапазоне
+ * @param {int} max - максимальное число в диапазоне
+ * @returns {int} - целое случайное число
+ */
 function getRandomInRange(min, max) {
-  return Math.abs(Math.floor(Math.random() * (max - min + 1)) + min);
+  if (min < 0 || max < 0 ) { throw 'ошибочное значение переменной';}
+  if (min > max) {
+    max = max + min;
+    min = max - min;
+    max = max - min;
+  }
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 getRandomInRange();
-/** за основу взято: https://myrusakov.ru/js-random-numbers.html
-* возвращается значение по модулю,  передаваемые аргументы могут быть любыми.
-*/
 
+/**
+ * функция проверяет строку на допустимую длину
+ * @param {''} str - произвольная строка
+ * @param {int} maxLength - допустимая длина
+ * @returns {Boolean} - Булево значение
+ */
 function checkMaxLength (str, maxLength) {
-  return str.length <= maxLength ? 'true' : 'false';
+  return str.length <= maxLength;
 }
 
 checkMaxLength();
