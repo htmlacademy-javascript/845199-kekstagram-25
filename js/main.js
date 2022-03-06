@@ -18,11 +18,11 @@ getRandomInRange();
 
 /**
  * функция проверяет строку на допустимую длину
- * @param {''} str - произвольная строка
+ * @param {string} str - произвольная строка
  * @param {int} maxLength - допустимая длина
  * @returns {Boolean} - Булево значение
  */
-function checkMaxLength (str, maxLength) {
+function checkMaxLength(str, maxLength) {
   return str.length <= maxLength;
 }
 
