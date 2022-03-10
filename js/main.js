@@ -28,6 +28,16 @@ const MESSAGES = [
   'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!',
 ];
 
+const DESCRIPTION_ID_COUNT = 25;
+const PHOTO_COUNT = 25; // количество доступных фотографий в галлерее
+const COMMENT_ID_COUNT = 100000000;
+const MIN_LIKES_COUNT = 15;
+const MAX_LIKES_COUNT = 200;
+const SIMILAR_PHOTO_COUNT = 25; // количество выводимых фотографий
+const idListPhotos = [];
+const idListComments = [];
+const urlList = [];
+
 /**
  * функция возвращает случайное число из диапазона
  * @param {int} min - минимальное число в диапазоне
@@ -41,9 +51,9 @@ function getRandomInRange(min, max) {
     min = max - min;
     max = max - min;
   }
-  const ROUNDED_MIN = Math.ceil(min);
-  const ROUNDED_MAX = Math.floor(max);
-  return Math.floor(Math.random() * (ROUNDED_MAX - ROUNDED_MIN + 1)) + ROUNDED_MIN;
+  const roundedMin = Math.ceil(min);
+  const roundedMax = Math.floor(max);
+  return Math.floor(Math.random() * (roundedMax - roundedMin + 1)) + roundedMin;
 }
 
 /**
@@ -56,44 +66,44 @@ function checkMaxLength(string, maxLength) {
   return string.length <= maxLength;
 }
 
-const getRandomArrayElement = (elements) => {
-  return elements[getRandomInRange(0, elements.length - 1)];
+checkMaxLength();
+
+const getRandomArrayElement = (elements) => elements[getRandomInRange(0, elements.length - 1)];
+
+const getRandomIdPhotos = (idCount) => {
+  let randomIdPhotos = getRandomInRange(1, idCount);
+
+  while (idListPhotos.includes(randomIdPhotos)) {
+    randomIdPhotos = getRandomInRange(1, idCount);
+  }
+
+  idListPhotos.push(randomIdPhotos);
+
+  return randomIdPhotos;
 };
 
-const DESCRIPTION_ID_COUNT = 25;
-const PHOTO_COUNT = 25;
-const COMMENT_ID_COUNT = 100000000;
+const getRandomIdComments = (idCount) => {
+  let randomIdComments = getRandomInRange(1, idCount);
 
-const getRandomId = (idCount) => {
-  const ID_LIST = [];
-
-  for (let i = 1; i <= idCount; i++) {
-    let randomId = getRandomInRange(1, idCount);
-
-    while (ID_LIST.includes(randomId)) {
-      randomId = getRandomInRange(1, idCount);
-    }
-
-    ID_LIST.push(randomId);
-
-    return randomId;
+  while (idListComments.includes(randomIdComments)) {
+    randomIdComments = getRandomInRange(1, idCount);
   }
+
+  idListComments.push(randomIdComments);
+
+  return randomIdComments;
 };
 
 const getRandomUrl = (urlCount) => {
-  const URL_LIST = [];
+  let randomUrl = getRandomInRange(1, urlCount);
 
-  for (let i = 1; i <= urlCount; i++) {
-    let randomUrl = getRandomInRange(1, urlCount);
-
-    while (URL_LIST.includes(randomUrl)) {
-      randomUrl = getRandomInRange(1, urlCount);
-    }
-
-    URL_LIST.push(randomUrl);
-
-    return `photos/${randomUrl}.jpg`;
+  while (urlList.includes(randomUrl)) {
+    randomUrl = getRandomInRange(1, urlCount);
   }
+
+  urlList.push(randomUrl);
+
+  return `photos/${randomUrl}.jpg`;
 };
 
 const getRandomAvatar = () => {
@@ -101,56 +111,52 @@ const getRandomAvatar = () => {
   return `img/avatar-${RANDOM_AVATAR_NUMBER}.svg`;
 };
 
-
-const createRandomMessage = () => {
-  const MESSAGE_LIST = [];
-  for (let i = 0; i <= MESSAGES.length -1; i++) {
-
-    let randomMessage = getRandomArrayElement(MESSAGES);
-
-    while (MESSAGE_LIST.includes(randomMessage)) {
-      randomMessage = getRandomArrayElement(MESSAGES);
-    }
-
-    MESSAGE_LIST.push(randomMessage);
-    return ' ' + randomMessage;
-  }
-};
-
 const createRandomDoubleMessage = () => {
+  const MESSAGE_LIST = [];
+  const createRandomMessage = () => {
+
+    for (let i = 0; i <= MESSAGES.length -1; i++) {
+
+      let randomMessage = getRandomArrayElement(MESSAGES);
+
+      while (MESSAGE_LIST.includes(randomMessage)) {
+        randomMessage = getRandomArrayElement(MESSAGES);
+      }
+
+      MESSAGE_LIST.push(randomMessage);
+      return ` ${  randomMessage}`;
+    }
+  };
   const RANDOM_DOUBLE_MESSAGE = String(Array.from({length: getRandomInRange(1, 2)}, createRandomMessage));
   return RANDOM_DOUBLE_MESSAGE.trim();
 };
 
 function createComments() {
   return ({
-    id: getRandomId(COMMENT_ID_COUNT),
+    id: getRandomIdComments(COMMENT_ID_COUNT),
     avatar: getRandomAvatar(),
     message: createRandomDoubleMessage(),
     name: getRandomArrayElement(NAMES),
   });
 }
 
-const SIMILAR_COMMENTS_COUNT = getRandomInRange(1, 3);
-
 function getSimilarComments() {
+  const SIMILAR_COMMENTS_COUNT = getRandomInRange(1, 3);
   return Array.from({length: SIMILAR_COMMENTS_COUNT}, createComments);
 }
 
-function createPhotoDescription() {
+function createPhoto() {
   return {
-    id: getRandomId(DESCRIPTION_ID_COUNT),
+    id: getRandomIdPhotos(DESCRIPTION_ID_COUNT),
     url: getRandomUrl(PHOTO_COUNT),
     description: getRandomArrayElement(DESCRIPTIONS),
-    likes: getRandomInRange(15, 200),
+    likes: getRandomInRange(MIN_LIKES_COUNT, MAX_LIKES_COUNT),
     comments: getSimilarComments(),
   };
 }
 
-const SIMILAR_PHOTO_DESCRIPTION_COUNT = 25;
-
-function getSimilarPhotoDescription() {
-  return Array.from({length: SIMILAR_PHOTO_DESCRIPTION_COUNT}, createPhotoDescription);
+function getSimilarPhoto(photosCount) {
+  return Array.from({length: photosCount}, createPhoto);
 }
 
-getSimilarPhotoDescription();
+getSimilarPhoto(SIMILAR_PHOTO_COUNT);
