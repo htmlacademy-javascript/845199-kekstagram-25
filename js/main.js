@@ -112,18 +112,18 @@ const getRandomAvatar = () => {
 };
 
 const createRandomDoubleMessage = () => {
-  const MESSAGE_LIST = [];
+  const messageList = [];
   const createRandomMessage = () => {
 
     for (let i = 0; i <= MESSAGES.length -1; i++) {
 
       let randomMessage = getRandomArrayElement(MESSAGES);
 
-      while (MESSAGE_LIST.includes(randomMessage)) {
+      while (messageList.includes(randomMessage)) {
         randomMessage = getRandomArrayElement(MESSAGES);
       }
 
-      MESSAGE_LIST.push(randomMessage);
+      messageList.push(randomMessage);
       return ` ${  randomMessage}`;
     }
   };
