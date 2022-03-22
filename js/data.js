@@ -129,4 +129,5 @@ function getSimilarPhoto(photosCount) {
   return Array.from({length: photosCount}, createPhoto);
 }
 
-getSimilarPhoto(SIMILAR_PHOTO_COUNT);
+export {getSimilarPhoto};
+export {SIMILAR_PHOTO_COUNT};
