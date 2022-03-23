@@ -22,7 +22,7 @@ function getRandomInRange(min, max) {
  * @param {int} maxLength - допустимая длина
  * @returns {Boolean} - Булево значение
  */
-function checkMaxLength(string, maxLength) {
+function checkMaxLength(string = '', maxLength = 140) {
   return string.length <= maxLength;
 }
 
