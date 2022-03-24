@@ -1,3 +1,5 @@
+import {getFullsizeModal} from './fullsize-modal.js';
+
 const renderPhotos = (photosData) => {
 
   const templateFragment = document.querySelector('#picture').content; // Находим фрагмент HTML документа с содержимым темплейта
@@ -10,6 +12,10 @@ const renderPhotos = (photosData) => {
     similarPicture.querySelector('.picture__img').src = url;
     similarPicture.querySelector('.picture__likes').textContent = likes;
     similarPicture.querySelector('.picture__comments').textContent = comments.length;
+
+    similarPicture.addEventListener('click', () => {
+      getFullsizeModal(url, likes, comments);
+    });
 
     fragment.appendChild(similarPicture);
   });
