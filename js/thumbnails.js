@@ -1,20 +1,26 @@
-import {getSimilarPhoto} from './data.js';
-import {SIMILAR_PHOTO_COUNT} from './data.js';
+import {getFullsizeModal} from './fullsize-modal.js';
 
-const templateFragment = document.querySelector('#picture').content; // Находим фрагмент HTML документа с содержимым темплейта
-const templatePicture = templateFragment.querySelector('.picture'); // Находим необходимую часть в фрагменте, которую будем "размножать"
-const fragment = document.createDocumentFragment(); // Создаем временное "хранилище", куда будем "складывать" создаваемые по шаблону картинки
-const picturesList = document.querySelector('.pictures'); // В этот список мы в итоге добавим содержимое временного "хранилища"
+const renderPhotos = (photosData) => {
 
-const similarPictures = getSimilarPhoto(SIMILAR_PHOTO_COUNT);
+  const templateFragment = document.querySelector('#picture').content; // Находим фрагмент HTML документа с содержимым темплейта
+  const templatePicture = templateFragment.querySelector('.picture'); // Находим необходимую часть в фрагменте, которую будем "размножать"
+  const fragment = document.createDocumentFragment(); // Создаем временное "хранилище", куда будем "складывать" создаваемые по шаблону картинки
+  const picturesList = document.querySelector('.pictures'); // В этот список мы в итоге добавим содержимое временного "хранилища"
 
-similarPictures.forEach(({url, likes, comments}) => {
-  const similarPicture =  templatePicture.cloneNode(true);
-  similarPicture.querySelector('.picture__img').src = url;
-  similarPicture.querySelector('.picture__likes').textContent = likes;
-  similarPicture.querySelector('.picture__comments').textContent = comments.length;
+  photosData.forEach(({url, likes, comments}) => {
+    const similarPicture =  templatePicture.cloneNode(true);
+    similarPicture.querySelector('.picture__img').src = url;
+    similarPicture.querySelector('.picture__likes').textContent = likes;
+    similarPicture.querySelector('.picture__comments').textContent = comments.length;
 
-  fragment.appendChild(similarPicture);
-});
+    similarPicture.addEventListener('click', () => {
+      getFullsizeModal(url, likes, comments);
+    });
 
-picturesList.appendChild(fragment);
+    fragment.appendChild(similarPicture);
+  });
+
+  picturesList.appendChild(fragment);
+};
+
+export {renderPhotos};
