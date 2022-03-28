@@ -34,4 +34,6 @@ checkMaxLength();
  */
 const getRandomArrayElement = (elements) => elements[getRandomInRange(0, elements.length - 1)];
 
-export {getRandomArrayElement,getRandomInRange};
+const isEscapeKey = (evt) => evt.key === 'Escape';
+
+export {getRandomArrayElement,getRandomInRange,isEscapeKey};

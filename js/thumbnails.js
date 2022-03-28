@@ -1,4 +1,4 @@
-import {getFullsizeModal} from './fullsize-modal.js';
+import {getFullsizeModal,openUserModal,closeUserModal,closeButton} from './fullsize-modal.js';
 
 const renderPhotos = (photosData) => {
 
@@ -15,6 +15,11 @@ const renderPhotos = (photosData) => {
 
     similarPicture.addEventListener('click', () => {
       getFullsizeModal(url, likes, comments);
+      openUserModal();
+
+      closeButton.addEventListener('click', () => {
+        closeUserModal ();
+      });
     });
 
     fragment.appendChild(similarPicture);
