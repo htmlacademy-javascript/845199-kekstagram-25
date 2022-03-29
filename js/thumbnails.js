@@ -1,4 +1,4 @@
-import {getFullsizeModal,openUserModal,closeUserModal,closeButton} from './fullsize-modal.js';
+import {getFullsizeModal, openUserModal, closeUserModal, closeButton} from './fullsize-modal.js';
 
 const renderPhotos = (photosData) => {
 
