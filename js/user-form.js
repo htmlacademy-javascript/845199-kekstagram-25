@@ -12,35 +12,29 @@ const activateValidationForm = () => {
   const onFormEscKeydown = (evt) => {
     if (isEscapeKey(evt)) {
       evt.preventDefault();
-      uploadForm.classList.add('hidden');
-      body.classList.remove('modal-open');
+      onFormCloseUpload();
     }
   };
-
-  function openUploadForm () {
+  // Переименовать хэндлеры
+  function onFormOpenUpload () {
     uploadForm.classList.remove('hidden');
     body.classList.add('modal-open');
 
     document.addEventListener('keydown', onFormEscKeydown);
   }
 
-  function closeUploadForm () {
+  function onFormCloseUpload () {
     uploadForm.classList.add('hidden');
     body.classList.remove('modal-open');
 
     document.removeEventListener('keydown', onFormEscKeydown);
+    uploadFile.value = '';
   }
 
-  function userUploadFile () {
-    const files = userUploadFile.files;
-    uploadFile.files = files[0].name;
-  }
-
-  uploadFile.addEventListener('change',openUploadForm);
-  uploadFile.addEventListener('change',userUploadFile);
+  uploadFile.addEventListener('change',onFormOpenUpload);
 
   closeButtonUploadForm.addEventListener('click', () => {
-    closeUploadForm ();
+    onFormCloseUpload ();
   });
 
   const pristine = new Pristine(form,{
