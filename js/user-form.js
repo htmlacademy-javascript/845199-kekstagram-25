@@ -8,6 +8,10 @@ const activateValidationForm = () => {
   const closeButtonUploadForm = document.querySelector('.img-upload__cancel');
   const form = document.querySelector('.img-upload__form');
   const hashtags = form.querySelector('.text__hashtags');
+  const scaleControlSmaller = document.querySelector('.scale__control--smaller');
+  const scaleControlBigger = document.querySelector('.scale__control--bigger');
+  const scaleControlValue = document.querySelector('.scale__control--value');
+  const imagePicturePreview = document.querySelector('.img-upload__preview img');
 
   const onFormEscKeydown = (evt) => {
     if (isEscapeKey(evt)) {
@@ -15,7 +19,7 @@ const activateValidationForm = () => {
       onFormCloseUpload();
     }
   };
-  // Переименовать хэндлеры
+
   function onFormOpenUpload () {
     uploadForm.classList.remove('hidden');
     body.classList.add('modal-open');
