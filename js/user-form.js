@@ -1,5 +1,6 @@
 import {isEscapeKey} from './util.js';
 import {body} from './fullsize-modal.js';
+import {imagePicturePreview} from './effects.js';
 
 const activateValidationForm = () => {
 
@@ -11,7 +12,24 @@ const activateValidationForm = () => {
   const scaleControlSmaller = document.querySelector('.scale__control--smaller');
   const scaleControlBigger = document.querySelector('.scale__control--bigger');
   const scaleControlValue = document.querySelector('.scale__control--value');
-  const imagePicturePreview = document.querySelector('.img-upload__preview img');
+  const MIN_SCALE_VALUE = 25;
+  const MAX_SCALE_VALUE = 100;
+  const SCALE_STEP_VALUE = 25;
+  const DEFAULT_VALUE = 100;
+
+  function lowerScale () {
+    if (parseInt(scaleControlValue.value, 10) > MIN_SCALE_VALUE) {
+      scaleControlValue.value = `${parseInt(scaleControlValue.value, 10) - SCALE_STEP_VALUE} %`;
+      imagePicturePreview.style.transform = `scale(${parseInt(scaleControlValue.value, 10)/100})`;
+    }
+  }
+
+  function increaseScale () {
+    if (parseInt(scaleControlValue.value, 10) < MAX_SCALE_VALUE) {
+      scaleControlValue.value = `${parseInt(scaleControlValue.value, 10) + SCALE_STEP_VALUE} %`;
+      imagePicturePreview.style.transform = `scale(${parseInt(scaleControlValue.value, 10)/100})`;
+    }
+  }
 
   const onFormEscKeydown = (evt) => {
     if (isEscapeKey(evt)) {
@@ -25,6 +43,9 @@ const activateValidationForm = () => {
     body.classList.add('modal-open');
 
     document.addEventListener('keydown', onFormEscKeydown);
+    scaleControlValue.value = `${DEFAULT_VALUE} %`;
+    scaleControlSmaller.addEventListener('click', lowerScale);
+    scaleControlBigger.addEventListener('click', increaseScale);
   }
 
   function onFormCloseUpload () {
@@ -32,6 +53,8 @@ const activateValidationForm = () => {
     body.classList.remove('modal-open');
 
     document.removeEventListener('keydown', onFormEscKeydown);
+    scaleControlSmaller.removeEventListener('click', lowerScale);
+    scaleControlBigger.removeEventListener('click', increaseScale);
     uploadFile.value = '';
   }
 
@@ -44,7 +67,8 @@ const activateValidationForm = () => {
   const pristine = new Pristine(form,{
     classTo: 'text__description-label',
     errorTextParent: 'text__description-label',
-    errorTextClass: 'text__description-error-text',
+    errorTextTag: 'div',
+    errorTextClass: 'text__description-label-error-text',
   });
 
   form.addEventListener('submit', (evt) => {
