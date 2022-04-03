@@ -1,5 +1,6 @@
 import {isEscapeKey} from './util.js';
 import {body} from './fullsize-modal.js';
+import {activateEffects, deactivateEffects} from './effects.js';
 
 const MIN_SCALE_VALUE = 25;
 const MAX_SCALE_VALUE = 100;
@@ -47,18 +48,19 @@ const activateValidationForm = () => {
     scaleControlValue.value = `${DEFAULT_VALUE} %`;
     scaleControlSmaller.addEventListener('click', lowerScale);
     scaleControlBigger.addEventListener('click', increaseScale);
+
+    activateEffects();
   }
 
   function onFormCloseUpload () {
     uploadForm.classList.add('hidden');
     body.classList.remove('modal-open');
-    imagePicturePreview.style.transform = '';
-    imagePicturePreview.style.filter = 'none';
 
     document.removeEventListener('keydown', onFormEscKeydown);
     scaleControlSmaller.removeEventListener('click', lowerScale);
     scaleControlBigger.removeEventListener('click', increaseScale);
     uploadFile.value = '';
+    deactivateEffects();
   }
 
   uploadFile.addEventListener('change', onFormOpenUpload);
