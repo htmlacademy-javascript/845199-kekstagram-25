@@ -1,21 +1,23 @@
 import {isEscapeKey} from './util.js';
 import {body} from './fullsize-modal.js';
-import {imagePicturePreview} from './effects.js';
+import {activateEffects, deactivateEffects} from './effects.js';
+
+const MIN_SCALE_VALUE = 25;
+const MAX_SCALE_VALUE = 100;
+const SCALE_STEP_VALUE = 25;
+const DEFAULT_VALUE = 100;
+
+const imagePicturePreview = document.querySelector('.img-upload__preview img');
+const uploadFile = document.querySelector('#upload-file');
+const uploadForm = document.querySelector('.img-upload__overlay');
+const closeButtonUploadForm = document.querySelector('.img-upload__cancel');
+const form = document.querySelector('.img-upload__form');
+const hashtags = form.querySelector('.text__hashtags');
+const scaleControlSmaller = document.querySelector('.scale__control--smaller');
+const scaleControlBigger = document.querySelector('.scale__control--bigger');
+const scaleControlValue = document.querySelector('.scale__control--value');
 
 const activateValidationForm = () => {
-
-  const uploadFile = document.querySelector('#upload-file');
-  const uploadForm = document.querySelector('.img-upload__overlay');
-  const closeButtonUploadForm = document.querySelector('.img-upload__cancel');
-  const form = document.querySelector('.img-upload__form');
-  const hashtags = form.querySelector('.text__hashtags');
-  const scaleControlSmaller = document.querySelector('.scale__control--smaller');
-  const scaleControlBigger = document.querySelector('.scale__control--bigger');
-  const scaleControlValue = document.querySelector('.scale__control--value');
-  const MIN_SCALE_VALUE = 25;
-  const MAX_SCALE_VALUE = 100;
-  const SCALE_STEP_VALUE = 25;
-  const DEFAULT_VALUE = 100;
 
   function lowerScale () {
     if (parseInt(scaleControlValue.value, 10) > MIN_SCALE_VALUE) {
@@ -46,6 +48,8 @@ const activateValidationForm = () => {
     scaleControlValue.value = `${DEFAULT_VALUE} %`;
     scaleControlSmaller.addEventListener('click', lowerScale);
     scaleControlBigger.addEventListener('click', increaseScale);
+
+    activateEffects();
   }
 
   function onFormCloseUpload () {
@@ -56,19 +60,20 @@ const activateValidationForm = () => {
     scaleControlSmaller.removeEventListener('click', lowerScale);
     scaleControlBigger.removeEventListener('click', increaseScale);
     uploadFile.value = '';
+    deactivateEffects();
   }
 
-  uploadFile.addEventListener('change',onFormOpenUpload);
+  uploadFile.addEventListener('change', onFormOpenUpload);
 
   closeButtonUploadForm.addEventListener('click', () => {
     onFormCloseUpload ();
   });
 
   const pristine = new Pristine(form,{
-    classTo: 'text__description-label',
-    errorTextParent: 'text__description-label',
+    classTo: 'img-upload__text',
+    errorTextParent: 'img-upload__text',
     errorTextTag: 'div',
-    errorTextClass: 'text__description-label-error-text',
+    errorTextClass: 'text__error-text',
   });
 
   form.addEventListener('submit', (evt) => {
