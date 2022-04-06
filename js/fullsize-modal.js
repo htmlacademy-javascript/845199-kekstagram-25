@@ -1,20 +1,21 @@
 import {isEscapeKey} from './util.js';
+import './api.js';
 
 const body = document.querySelector('body');
 const bigPicture = document.querySelector('.big-picture');
 const bigPictureImage = bigPicture.querySelector('.big-picture__img img');
 const likesCount = bigPicture.querySelector('.likes-count');
-const commentsCount = bigPicture.querySelector('.comments-count');
 const socialComments = bigPicture.querySelector('.social__comments');
 const socialCaption = bigPicture.querySelector('.social__caption');
 const closeButton = bigPicture.querySelector('.big-picture__cancel');
 const socialCommentCount = bigPicture.querySelector('.social__comment-count');
 const socialCommentsLoader = bigPicture.querySelector('.comments-loader');
+const commentsCount = socialCommentCount.querySelector('.comments-count');
 
 const getFullsizeModal = (url, likes, comments, description) => {
   bigPictureImage.src = url;
   likesCount.textContent = likes;
-  commentsCount.textContent = comments;
+  commentsCount.textContent = comments.length;
   socialCaption.textContent = description;
 
   const fragment = document.createDocumentFragment();
@@ -56,9 +57,7 @@ const onPopupEscKeydown = (evt) => {
 function openUserModal () {
   bigPicture.classList.remove('hidden');
   body.classList.add('modal-open');
-  socialCommentCount.classList.add('hidden');
   socialCommentsLoader.classList.add('hidden');
-
   document.addEventListener('keydown', onPopupEscKeydown);
 }
 
