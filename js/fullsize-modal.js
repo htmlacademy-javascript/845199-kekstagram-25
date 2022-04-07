@@ -1,5 +1,4 @@
 import {isEscapeKey} from './util.js';
-import './api.js';
 
 const body = document.querySelector('body');
 const bigPicture = document.querySelector('.big-picture');
@@ -42,6 +41,7 @@ const getFullsizeModal = (url, likes, comments, description) => {
     fragment.appendChild(socialCommentsItem);
   });
 
+  socialComments.innerHTML = '';
   socialComments.appendChild(fragment);
 };
 
@@ -68,4 +68,4 @@ function closeUserModal () {
   document.removeEventListener('keydown', onPopupEscKeydown);
 }
 
-export {getFullsizeModal, openUserModal, closeUserModal, closeButton,body};
+export {getFullsizeModal, openUserModal, closeUserModal, closeButton, body};

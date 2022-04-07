@@ -1,5 +1,4 @@
 import {getFullsizeModal, openUserModal, closeUserModal, closeButton} from './fullsize-modal.js';
-import './api.js';
 
 const renderPhotos = (similarPhotos) => {
 
@@ -8,14 +7,14 @@ const renderPhotos = (similarPhotos) => {
   const fragment = document.createDocumentFragment(); // Создаем временное "хранилище", куда будем "складывать" создаваемые по шаблону картинки
   const picturesList = document.querySelector('.pictures'); // В этот список мы в итоге добавим содержимое временного "хранилища"
 
-  similarPhotos.forEach(({url, likes, comments}) => {
+  similarPhotos.forEach(({url, likes, comments, description}) => {
     const similarPicture =  templatePicture.cloneNode(true);
     similarPicture.querySelector('.picture__img').src = url;
     similarPicture.querySelector('.picture__likes').textContent = likes;
     similarPicture.querySelector('.picture__comments').textContent = comments.length;
 
     similarPicture.addEventListener('click', () => {
-      getFullsizeModal(url, likes, comments);
+      getFullsizeModal(url, likes, comments, description);
       openUserModal();
 
       closeButton.addEventListener('click', () => {
