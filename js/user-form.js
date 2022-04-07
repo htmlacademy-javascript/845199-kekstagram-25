@@ -1,4 +1,4 @@
-import {isEscapeKey, showAlert} from './util.js';
+import {isEscapeKey} from './util.js';
 import {body} from './fullsize-modal.js';
 import {activateEffects, deactivateEffects} from './effects.js';
 import {sendData} from './api.js';
@@ -88,6 +88,7 @@ const activateValidationForm = () => {
     submitButton.disabled = false;
     submitButton.textContent = 'Опубликовать';
   };
+
   function setUserFormSubmit(onSuccess) {
 
     form.addEventListener('submit', (evt) => {
@@ -99,11 +100,9 @@ const activateValidationForm = () => {
         sendData(
           () => {
             onSuccess();
-            onFormCloseUpload();
             unblockSubmitButton();
           },
           () => {
-            showAlert('Не удалось отправить форму. Попробуйте ещё раз');
             unblockSubmitButton();
           },
           new FormData(evt.target),
@@ -120,11 +119,11 @@ const activateValidationForm = () => {
     return result;
   }
 
-  pristine.addValidator(
-    hashtags,
-    validateHashtag,
-    'До 19 букв и цифр без пробелов и знаков после решетки'
-  );
+  // pristine.addValidator(
+  //   hashtags,
+  //   validateHashtag,
+  //   'До 19 букв и цифр без пробелов и знаков после решетки'
+  // );
 
 
 };

@@ -1,9 +1,17 @@
+import {showAlert} from './util.js';
+
 const getData = (onSuccess) => {
   fetch('https://25.javascript.pages.academy/kekstagram/data')
     .then((response) => response.json())
     .then((similarPhotos) => {
-      onSuccess(similarPhotos);
-      console.log(similarPhotos);
+      if (similarPhotos.length) {
+        onSuccess(similarPhotos);
+      } else {
+        showAlert('Ошибка загрузки данных');
+      }
+    })
+    .catch(() => {
+      showAlert('Ошибка загрузки изображений');
     });
 };
 
@@ -18,15 +26,14 @@ const sendData = (onSuccess, onFail, FormData) => {
   )
 
     .then((response) => {
-      if(response.ok) {
+      if (response.ok) {
         onSuccess();
       } else {
-        onFail('Не удалось отправить форму. Попробуйте ещё раз');
+        onFail(showAlert('Не удалось отправить форму. Попробуйте ещё раз'));
       }
     })
-    .catch((err) => {
-      onFail('Не удалось отправить форму. Попробуйте ещё раз');
-      console.error(err);
+    .catch(() => {
+      onFail(showAlert('Не удалось отправить форму. Попробуйте ещё раз'));
     });
 };
 
