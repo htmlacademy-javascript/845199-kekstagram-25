@@ -14,6 +14,7 @@ const uploadForm = document.querySelector('.img-upload__overlay');
 const closeButtonUploadForm = document.querySelector('.img-upload__cancel');
 const form = document.querySelector('.img-upload__form');
 const hashtags = form.querySelector('.text__hashtags');
+const textDescription = form.querySelector('.text__description');
 const scaleControlSmaller = document.querySelector('.scale__control--smaller');
 const scaleControlBigger = document.querySelector('.scale__control--bigger');
 const scaleControlValue = document.querySelector('.scale__control--value');
@@ -36,7 +37,9 @@ const activateValidationForm = () => {
   }
 
   const onFormEscKeydown = (evt) => {
-    if (isEscapeKey(evt)) {
+    const isHashtagsInputFocused = hashtags === document.activeElement;
+    const isTextDescriptionFocused = textDescription === document.activeElement;
+    if (isEscapeKey(evt) && !isHashtagsInputFocused && !isTextDescriptionFocused) {
       evt.preventDefault();
       onFormCloseUpload();
     }
@@ -104,6 +107,7 @@ const activateValidationForm = () => {
           },
           () => {
             unblockSubmitButton();
+            onFormCloseUpload();
           },
           new FormData(evt.target),
         );

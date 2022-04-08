@@ -1,4 +1,81 @@
-import {showAlert} from './util.js';
+import {showAlert, isEscapeKey} from './util.js';
+
+const body = document.querySelector('body');
+const templateSuccess = document.querySelector('#success').content.querySelector('.success');
+const templateError = document.querySelector('#error').content.querySelector('.error');
+const successUnit = templateSuccess.cloneNode(true);
+const successButton = successUnit.querySelector('.success__button');
+const errorUnit = templateError.cloneNode(true);
+const errorButton = errorUnit.querySelector('.error__button');
+
+const onSuccessMessageEscKeyDown = (evt) => {
+  if (isEscapeKey(evt)) {
+    evt.preventDefault();
+    successUnit.classList.add('hidden');
+  }
+};
+
+const onErrorMessageEscKeyDown = (evt) => {
+  if (isEscapeKey(evt)) {
+    evt.preventDefault();
+    errorUnit.classList.add('hidden');
+  }
+};
+
+const createSuccessMessage = () => {
+  body.appendChild(successUnit);
+  successUnit.classList.add('hidden');
+};
+
+const createErrorMessage = () => {
+  body.appendChild(errorUnit);
+  errorUnit.classList.add('hidden');
+};
+
+createSuccessMessage();
+createErrorMessage();
+
+function openSuccessMessage () {
+  successUnit.classList.remove('hidden');
+  document.addEventListener('keydown', onSuccessMessageEscKeyDown);
+
+  successButton.addEventListener('click', () => {
+    closeSuccessMessage ();
+  });
+
+  // window.addEventListener('click', (event) => {
+  //   if (!event.target.contains(successUnit)) {
+  //     successUnit.classList.add('hidden');
+  //   }
+  // });
+}
+
+function closeSuccessMessage () {
+  successUnit.classList.add('hidden');
+
+  document.removeEventListener('keydown', onSuccessMessageEscKeyDown);
+
+  successButton.removeEventListener('click', () => {
+    closeSuccessMessage ();
+  });
+}
+
+function openErrorMessage () {
+  errorUnit.classList.remove('hidden');
+  document.addEventListener('keydown', onErrorMessageEscKeyDown);
+
+  errorButton.addEventListener('click', () => {
+    closeErrorMessage ();
+  });
+}
+
+function closeErrorMessage () {
+  errorUnit.classList.add('hidden');
+  document.removeEventListener('keydown', onErrorMessageEscKeyDown);
+  errorButton.removeEventListener('click', () => {
+    closeErrorMessage ();
+  });
+}
 
 const getData = (onSuccess) => {
   fetch('https://25.javascript.pages.academy/kekstagram/data')
@@ -27,13 +104,13 @@ const sendData = (onSuccess, onFail, FormData) => {
 
     .then((response) => {
       if (response.ok) {
-        onSuccess();
+        onSuccess(openSuccessMessage());
       } else {
-        onFail(showAlert('Не удалось отправить форму. Попробуйте ещё раз'));
+        onFail(openErrorMessage());
       }
     })
     .catch(() => {
-      onFail(showAlert('Не удалось отправить форму. Попробуйте ещё раз'));
+      onFail(openErrorMessage());
     });
 };
 
