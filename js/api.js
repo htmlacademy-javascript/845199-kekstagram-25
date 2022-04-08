@@ -71,7 +71,7 @@ function openErrorMessage () {
 
   window.addEventListener('click', (event) => {
     event.stopPropagation();
-    if (event.target.contains(successUnit)) {
+    if (event.target.contains(errorUnit)) {
       errorUnit.classList.add('hidden');
     }
   });
