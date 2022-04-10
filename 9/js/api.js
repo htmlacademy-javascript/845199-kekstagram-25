@@ -43,11 +43,12 @@ function openSuccessMessage () {
     closeSuccessMessage ();
   });
 
-  // window.addEventListener('click', (event) => {
-  //   if (!event.target.contains(successUnit)) {
-  //     successUnit.classList.add('hidden');
-  //   }
-  // });
+  window.addEventListener('click', (event) => {
+    event.stopPropagation();
+    if (event.target.contains(successUnit)) {
+      successUnit.classList.add('hidden');
+    }
+  });
 }
 
 function closeSuccessMessage () {
@@ -66,6 +67,13 @@ function openErrorMessage () {
 
   errorButton.addEventListener('click', () => {
     closeErrorMessage ();
+  });
+
+  window.addEventListener('click', (event) => {
+    event.stopPropagation();
+    if (event.target.contains(errorUnit)) {
+      errorUnit.classList.add('hidden');
+    }
   });
 }
 
