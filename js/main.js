@@ -1,8 +1,12 @@
-import {getSimilarPhoto, SIMILAR_PHOTO_COUNT} from'./data.js';
 import {renderPhotos} from'./thumbnails.js';
 import {activateValidationForm} from './user-form.js';
+import {getData} from './api.js';
 
-const photosData = getSimilarPhoto(SIMILAR_PHOTO_COUNT);
+const cb = (similarPhotos) => {
+  renderPhotos(similarPhotos);
+};
 
-renderPhotos(photosData);
+getData(cb);
+
+
 activateValidationForm();

@@ -1,6 +1,7 @@
 import {isEscapeKey} from './util.js';
 import {body} from './fullsize-modal.js';
 import {activateEffects, deactivateEffects} from './effects.js';
+import {sendData} from './api.js';
 
 const MIN_SCALE_VALUE = 25;
 const MAX_SCALE_VALUE = 100;
@@ -13,9 +14,11 @@ const uploadForm = document.querySelector('.img-upload__overlay');
 const closeButtonUploadForm = document.querySelector('.img-upload__cancel');
 const form = document.querySelector('.img-upload__form');
 const hashtags = form.querySelector('.text__hashtags');
+const textDescription = form.querySelector('.text__description');
 const scaleControlSmaller = document.querySelector('.scale__control--smaller');
 const scaleControlBigger = document.querySelector('.scale__control--bigger');
 const scaleControlValue = document.querySelector('.scale__control--value');
+const submitButton = document.querySelector('.img-upload__submit');
 
 const activateValidationForm = () => {
 
@@ -34,7 +37,9 @@ const activateValidationForm = () => {
   }
 
   const onFormEscKeydown = (evt) => {
-    if (isEscapeKey(evt)) {
+    const isHashtagsInputFocused = hashtags === document.activeElement;
+    const isTextDescriptionFocused = textDescription === document.activeElement;
+    if (isEscapeKey(evt) && !isHashtagsInputFocused && !isTextDescriptionFocused) {
       evt.preventDefault();
       onFormCloseUpload();
     }
@@ -69,29 +74,62 @@ const activateValidationForm = () => {
     onFormCloseUpload ();
   });
 
-  const pristine = new Pristine(form,{
+  const pristine = new Pristine(form, {
     classTo: 'img-upload__text',
     errorTextParent: 'img-upload__text',
     errorTextTag: 'div',
     errorTextClass: 'text__error-text',
   });
 
-  form.addEventListener('submit', (evt) => {
-    evt.preventDefault();
-    pristine.validate();
-  });
 
-  function validateHashtag(value) {
-    const re = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
-    const result = re.test(value);
-    return result;
+  const blockSubmitButton = () => {
+    submitButton.disabled = true;
+    submitButton.textContent = 'Сохраняю...';
+  };
+
+  const unblockSubmitButton = () => {
+    submitButton.disabled = false;
+    submitButton.textContent = 'Опубликовать';
+  };
+
+  function setUserFormSubmit(onSuccess) {
+
+    form.addEventListener('submit', (evt) => {
+      evt.preventDefault();
+
+      const isValid = pristine.validate();
+      if (isValid) {
+        blockSubmitButton();
+        sendData(
+          () => {
+            onSuccess();
+            unblockSubmitButton();
+          },
+          () => {
+            unblockSubmitButton();
+            onFormCloseUpload();
+          },
+          new FormData(evt.target),
+        );
+      }
+    });
   }
 
-  pristine.addValidator(
-    hashtags,
-    validateHashtag,
-    'До 19 букв и цифр без пробелов и знаков после решетки'
-  );
+  setUserFormSubmit(onFormCloseUpload);
+
+  // function validateHashtag(value) {
+  //   const re = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
+  //   const result = re.test(value);
+  //   return result;
+  // }
+
+  // pristine.addValidator(
+  //   hashtags,
+  //   validateHashtag,
+  //   'До 19 букв и цифр без пробелов и знаков после решетки'
+  // );
+
+
 };
 
 export {activateValidationForm};
