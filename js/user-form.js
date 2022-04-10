@@ -117,11 +117,11 @@ const activateValidationForm = () => {
 
   setUserFormSubmit(onFormCloseUpload);
 
-  function validateHashtag(value) {
-    const re = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
-    const result = re.test(value);
-    return result;
-  }
+  // function validateHashtag(value) {
+  //   const re = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
+  //   const result = re.test(value);
+  //   return result;
+  // }
 
   // pristine.addValidator(
   //   hashtags,
