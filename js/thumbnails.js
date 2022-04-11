@@ -6,6 +6,15 @@ const renderPhotos = (similarPhotos) => {
   const templatePicture = templateFragment.querySelector('.picture'); // Находим необходимую часть в фрагменте, которую будем "размножать"
   const fragment = document.createDocumentFragment(); // Создаем временное "хранилище", куда будем "складывать" создаваемые по шаблону картинки
   const picturesList = document.querySelector('.pictures'); // В этот список мы в итоге добавим содержимое временного "хранилища"
+  const pictures = document.querySelectorAll('.picture');
+
+  const removeAllPictures = () => {
+    for (let i = 0; i < pictures.length; i++) {
+      pictures[i].remove();
+    }
+  };
+
+  removeAllPictures();
 
   similarPhotos.forEach(({url, likes, comments, description}) => {
     const similarPicture =  templatePicture.cloneNode(true);
