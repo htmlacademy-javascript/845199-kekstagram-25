@@ -39,7 +39,7 @@ const getRandomArrayElement = (elements) => elements[getRandomInRange(0, element
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
 
-const showAlert = (message) => {
+function showAlert (message) {
   const alertContainer = document.createElement('div');
   alertContainer.style.zIndex = 100;
   alertContainer.style.position = 'absolute';
@@ -58,6 +58,15 @@ const showAlert = (message) => {
   setTimeout(() => {
     alertContainer.remove();
   }, ALERT_SHOW_TIME);
-};
+}
 
-export {getRandomArrayElement, getRandomInRange, isEscapeKey, showAlert};
+function debounce (callback, timeoutDelay = 500) {
+  let timeoutId;
+
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
+}
+
+export {getRandomArrayElement, getRandomInRange, isEscapeKey, showAlert, debounce};

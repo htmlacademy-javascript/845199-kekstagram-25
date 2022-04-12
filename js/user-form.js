@@ -7,6 +7,7 @@ const MIN_SCALE_VALUE = 25;
 const MAX_SCALE_VALUE = 100;
 const SCALE_STEP_VALUE = 25;
 const DEFAULT_VALUE = 100;
+const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 
 const imagePicturePreview = document.querySelector('.img-upload__preview img');
 const uploadFile = document.querySelector('#upload-file');
@@ -21,6 +22,17 @@ const scaleControlValue = document.querySelector('.scale__control--value');
 const submitButton = document.querySelector('.img-upload__submit');
 
 const activateValidationForm = () => {
+
+  uploadFile.addEventListener('change', () => {
+    const file = uploadFile.files[0];
+    const fileName = file.name.toLowerCase();
+
+    const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
+
+    if (matches) {
+      imagePicturePreview.src = URL.createObjectURL(file);
+    }
+  });
 
   function lowerScale () {
     if (parseInt(scaleControlValue.value, 10) > MIN_SCALE_VALUE) {
