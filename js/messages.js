@@ -1,4 +1,5 @@
 import {isEscapeKey} from './util.js';
+import {hashtags, textDescription} from './user-form.js';
 
 const body = document.querySelector('body');
 const templateSuccess = document.querySelector('#success').content.querySelector('.success');
@@ -48,7 +49,8 @@ const closeSuccessMessage = () => {
 const openSuccessMessage = () => {
   successUnit.classList.remove('hidden');
   document.addEventListener('keydown', onSuccessMessageEscKeyDown);
-
+  hashtags.value = '';
+  textDescription.value = '';
   successButton.addEventListener('click', () => {
     closeSuccessMessage ();
   });
