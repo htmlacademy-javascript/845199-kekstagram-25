@@ -4,18 +4,28 @@ const body = document.querySelector('body');
 const bigPicture = document.querySelector('.big-picture');
 const bigPictureImage = bigPicture.querySelector('.big-picture__img img');
 const likesCount = bigPicture.querySelector('.likes-count');
-const socialComments = bigPicture.querySelector('.social__comments');
+const socialCommentsList = bigPicture.querySelector('.social__comments');
 const socialCaption = bigPicture.querySelector('.social__caption');
 const closeButton = bigPicture.querySelector('.big-picture__cancel');
 const socialCommentCount = bigPicture.querySelector('.social__comment-count');
 const socialCommentsLoader = bigPicture.querySelector('.comments-loader');
-const commentsCount = socialCommentCount.querySelector('.comments-count');
 
 const getFullsizeModal = (url, likes, comments, description) => {
   bigPictureImage.src = url;
   likesCount.textContent = likes;
-  commentsCount.textContent = comments.length;
   socialCaption.textContent = description;
+
+  if (comments.length >= 5) {
+    socialCommentCount.innerHTML = `5 из <span class="comments-count">${comments.length}</span> комментариев`;
+  } else {
+    socialCommentCount.innerHTML = `${comments.length} из <span class="comments-count">${comments.length}</span> комментариев`;
+  }
+
+  if (comments.length <= 5) {
+    socialCommentsLoader.classList.add('hidden');
+  } else {
+    socialCommentsLoader.classList.remove('hidden');
+  }
 
   const fragment = document.createDocumentFragment();
 
@@ -41,9 +51,23 @@ const getFullsizeModal = (url, likes, comments, description) => {
     fragment.appendChild(socialCommentsItem);
   });
 
-  socialComments.innerHTML = '';
-  socialComments.appendChild(fragment);
+  socialCommentsList.innerHTML = '';
+  socialCommentsList.appendChild(fragment);
+
+  const hidingComments = () => {
+    const socialComments = socialCommentsList.querySelectorAll('.social__comment');
+    for (let i = 0; i < comments.length; i++) {
+      if (i > 4) {
+        socialComments[i].classList.add('hidden');
+      } else {
+        socialComments[i].classList.remove('hidden');
+      }
+    }
+  };
+
+  hidingComments();
 };
+
 
 const onPopupEscKeydown = (evt) => {
   if (isEscapeKey(evt)) {
@@ -57,7 +81,6 @@ const onPopupEscKeydown = (evt) => {
 function openUserModal () {
   bigPicture.classList.remove('hidden');
   body.classList.add('modal-open');
-  socialCommentsLoader.classList.add('hidden');
   document.addEventListener('keydown', onPopupEscKeydown);
 }
 
