@@ -1,4 +1,4 @@
-import {getFullsizeModal, openUserModal, onSocialCommentsLoaderClick, socialCommentsLoader, closeUserModal, closeButton} from './fullsize-modal.js';
+import {getFullsizeModal, openUserModal, closeUserModal, closeButton} from './fullsize-modal.js';
 
 const renderPhotos = (similarPhotos) => {
 
@@ -28,7 +28,6 @@ const renderPhotos = (similarPhotos) => {
 
       closeButton.addEventListener('click', () => {
         closeUserModal ();
-        socialCommentsLoader.removeEventListener('click', onSocialCommentsLoaderClick);
       });
     });
 
