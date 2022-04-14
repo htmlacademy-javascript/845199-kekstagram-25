@@ -11,22 +11,63 @@ const socialCommentCount = bigPicture.querySelector('.social__comment-count');
 const socialCommentsLoader = bigPicture.querySelector('.comments-loader');
 
 const getFullsizeModal = (url, likes, comments, description) => {
+  const commentsLength = comments.length;
+  let commentsCounter = 5;
+
   bigPictureImage.src = url;
   likesCount.textContent = likes;
   socialCaption.textContent = description;
 
-  if (comments.length >= 5) {
-    socialCommentCount.innerHTML = `5 из <span class="comments-count">${comments.length}</span> комментариев`;
-  } else {
-    socialCommentCount.innerHTML = `${comments.length} из <span class="comments-count">${comments.length}</span> комментариев`;
-  }
+  const showCommentsCount = () => {
+    if (commentsLength >= commentsCounter) {
+      socialCommentCount.innerHTML = `${commentsCounter} из <span class="comments-count">${commentsLength}</span> комментариев`;
+    } else {
+      socialCommentCount.innerHTML = `${commentsLength} из <span class="comments-count">${commentsLength}</span> комментариев`;
+    }
+  };
 
-  if (comments.length <= 5) {
-    socialCommentsLoader.classList.add('hidden');
-  } else {
-    socialCommentsLoader.classList.remove('hidden');
-  }
+  const updateCommentsCounterValue = () => {
+    const commentsRemainder = commentsLength - commentsCounter;
+    if (commentsRemainder >= 5) {
+      commentsCounter = commentsCounter + 5;
+    } else {
+      commentsCounter =  commentsCounter + commentsRemainder;
+    }
+  };
 
+  const showCommentsLoader = () => {
+    if (commentsLength <= commentsCounter) {
+      socialCommentsLoader.classList.add('hidden');
+    } else {
+      socialCommentsLoader.classList.remove('hidden');
+    }
+  };
+
+  showCommentsCount ();
+  showCommentsLoader ();
+
+  const fragmentWithComments = createFragmentWithComments(comments);
+
+  socialCommentsList.innerHTML = '';
+  socialCommentsList.appendChild(fragmentWithComments);
+  const socialComments = socialCommentsList.querySelectorAll('.social__comment');
+
+  const setCommentsVisibility = () => {
+    for (let i = 0; i < commentsLength; i++) {
+      if (i > commentsCounter - 1) {
+        socialComments[i].classList.add('hidden');
+      } else {
+        socialComments[i].classList.remove('hidden');
+      }
+    }
+  };
+
+  setCommentsVisibility(commentsLength, commentsCounter, socialComments);
+
+  socialCommentsLoader.addEventListener('click', () => onSocialCommentsLoaderClick(updateCommentsCounterValue, showCommentsCount, showCommentsLoader, setCommentsVisibility));
+};
+
+function createFragmentWithComments (comments) {
   const fragment = document.createDocumentFragment();
 
   comments.forEach(({avatar, message, name}) => {
@@ -51,23 +92,15 @@ const getFullsizeModal = (url, likes, comments, description) => {
     fragment.appendChild(socialCommentsItem);
   });
 
-  socialCommentsList.innerHTML = '';
-  socialCommentsList.appendChild(fragment);
+  return fragment;
+}
 
-  const hidingComments = () => {
-    const socialComments = socialCommentsList.querySelectorAll('.social__comment');
-    for (let i = 0; i < comments.length; i++) {
-      if (i > 4) {
-        socialComments[i].classList.add('hidden');
-      } else {
-        socialComments[i].classList.remove('hidden');
-      }
-    }
-  };
-
-  hidingComments();
-};
-
+function onSocialCommentsLoaderClick (updateCommentsCounterValue, showCommentsCount, showCommentsLoader, setCommentsVisibility) {
+  updateCommentsCounterValue();
+  showCommentsCount ();
+  showCommentsLoader ();
+  setCommentsVisibility();
+}
 
 const onPopupEscKeydown = (evt) => {
   if (isEscapeKey(evt)) {
@@ -91,4 +124,4 @@ function closeUserModal () {
   document.removeEventListener('keydown', onPopupEscKeydown);
 }
 
-export {getFullsizeModal, openUserModal, closeUserModal, closeButton, body};
+export {getFullsizeModal, openUserModal, closeUserModal, onSocialCommentsLoaderClick, socialCommentsLoader, closeButton, body};
