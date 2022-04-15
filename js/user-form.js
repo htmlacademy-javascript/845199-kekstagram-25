@@ -1,4 +1,4 @@
-import {isEscapeKey} from './util.js';
+import {isEscapeKey, checkMaxLength} from './util.js';
 import {body} from './fullsize-modal.js';
 import {activateEffects, deactivateEffects} from './effects.js';
 import {sendData} from './api.js';
@@ -8,6 +8,7 @@ const MAX_SCALE_VALUE = 100;
 const SCALE_STEP_VALUE = 25;
 const DEFAULT_VALUE = 100;
 const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+const SPLITTER = ' ';
 
 const imagePicturePreview = document.querySelector('.img-upload__preview img');
 const uploadFile = document.querySelector('#upload-file');
@@ -20,6 +21,10 @@ const scaleControlSmaller = document.querySelector('.scale__control--smaller');
 const scaleControlBigger = document.querySelector('.scale__control--bigger');
 const scaleControlValue = document.querySelector('.scale__control--value');
 const submitButton = document.querySelector('.img-upload__submit');
+const hashtagsValidationErrorMessage = 'Хэштег начинается с решетки<br/>Хэштег содержит только буквы и цифры (без пробелов)<br/>Минимальное число символов - 1, Максимальное - 19<br/>Хэштеги разделяются одним пробелом';
+const hashtagsCountValidationErrorMessage = 'Не более 5 хэштегов, разделенных пробелами';
+const hashtagsRepeatValidationErrorMessage = 'Хэштеги не должны повторяться';
+const textDescriptionValidationErrorMessage = 'Не более 140 знаков';
 
 const activateValidationForm = () => {
 
@@ -129,19 +134,60 @@ const activateValidationForm = () => {
 
   setUserFormSubmit(onFormCloseUpload);
 
-  // function validateHashtag(value) {
-  //   const re = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
-  //   const result = re.test(value);
-  //   return result;
-  // }
+  function validateSingleHashtag(value) {
+    const resultArray = value.split(SPLITTER);
+    const re = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
+    const result = resultArray.every((item) => re.test(item));
 
-  // pristine.addValidator(
-  //   hashtags,
-  //   validateHashtag,
-  //   'До 19 букв и цифр без пробелов и знаков после решетки'
-  // );
+    return value !== '' ? result : true;
+  }
 
+  pristine.addValidator(
+    hashtags,
+    validateSingleHashtag,
+    hashtagsValidationErrorMessage
+  );
 
+  function validateHashtagsRepeat(value) {
+    const resultArray = value.toLowerCase().split(SPLITTER);
+    const uniqArray = [];
+    for (let i = 0; i < resultArray.length; i++) {
+      if (uniqArray.includes(resultArray[i])) {
+        return false;
+      }
+
+      uniqArray.push(resultArray[i]);
+    }
+    return resultArray;
+  }
+
+  pristine.addValidator(
+    hashtags,
+    validateHashtagsRepeat,
+    hashtagsRepeatValidationErrorMessage
+  );
+
+  function validateHashtagsCount(value) {
+    const result = value.split(SPLITTER);
+
+    return !(result.length > 5);
+  }
+
+  pristine.addValidator(
+    hashtags,
+    validateHashtagsCount,
+    hashtagsCountValidationErrorMessage
+  );
+
+  function validateTextDescription(value) {
+    return value !=='' ? checkMaxLength(value) : true;
+  }
+
+  pristine.addValidator(
+    textDescription,
+    validateTextDescription,
+    textDescriptionValidationErrorMessage
+  );
 };
 
-export {activateValidationForm};
+export {activateValidationForm, hashtags, textDescription};

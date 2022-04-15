@@ -28,8 +28,6 @@ function checkMaxLength(string = '', maxLength = 140) {
   return string.length <= maxLength;
 }
 
-checkMaxLength();
-
 /**
  * функция возвращает случайный элемент из заданного массива
  * @param {elements} - массив
@@ -69,4 +67,4 @@ function debounce (callback, timeoutDelay = 500) {
   };
 }
 
-export {getRandomArrayElement, getRandomInRange, isEscapeKey, showAlert, debounce};
+export {getRandomArrayElement, getRandomInRange, isEscapeKey, showAlert, debounce, checkMaxLength};
