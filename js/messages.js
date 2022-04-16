@@ -23,6 +23,26 @@ const onErrorMessageEscKeyDown = (evt) => {
   }
 };
 
+const onWindowCloseErrorListener = () => {
+
+  window.addEventListener('click', (evt) => {
+    evt.stopPropagation();
+    if (evt.target.contains(errorUnit)) {
+      errorUnit.classList.add('hidden');
+    }
+  });
+};
+
+const onWindowCloseSuccessListener = () => {
+
+  window.addEventListener('click', (evt) => {
+    evt.stopPropagation();
+    if (evt.target.contains(successUnit)) {
+      successUnit.classList.add('hidden');
+    }
+  });
+};
+
 const createSuccessMessage = () => {
   body.appendChild(successUnit);
   successUnit.classList.add('hidden');
@@ -40,7 +60,7 @@ const closeSuccessMessage = () => {
   successUnit.classList.add('hidden');
 
   document.removeEventListener('keydown', onSuccessMessageEscKeyDown);
-
+  window.removeEventListener('click', onWindowCloseSuccessListener);
   successButton.removeEventListener('click', () => {
     closeSuccessMessage ();
   });
@@ -48,24 +68,21 @@ const closeSuccessMessage = () => {
 
 const openSuccessMessage = () => {
   successUnit.classList.remove('hidden');
+
   document.addEventListener('keydown', onSuccessMessageEscKeyDown);
+  window.addEventListener('click', onWindowCloseSuccessListener);
   hashtags.value = '';
   textDescription.value = '';
   successButton.addEventListener('click', () => {
     closeSuccessMessage ();
   });
-
-  window.addEventListener('click', (event) => {
-    event.stopPropagation();
-    if (event.target.contains(successUnit)) {
-      successUnit.classList.add('hidden');
-    }
-  });
 };
 
 const closeErrorMessage = () => {
   errorUnit.classList.add('hidden');
+
   document.removeEventListener('keydown', onErrorMessageEscKeyDown);
+  window.removeEventListener('click', onWindowCloseErrorListener);
   errorButton.removeEventListener('click', () => {
     closeErrorMessage ();
   });
@@ -73,17 +90,11 @@ const closeErrorMessage = () => {
 
 const openErrorMessage = () => {
   errorUnit.classList.remove('hidden');
-  document.addEventListener('keydown', onErrorMessageEscKeyDown);
 
+  document.addEventListener('keydown', onErrorMessageEscKeyDown);
+  window.addEventListener('click', onWindowCloseErrorListener);
   errorButton.addEventListener('click', () => {
     closeErrorMessage ();
-  });
-
-  window.addEventListener('click', (event) => {
-    event.stopPropagation();
-    if (event.target.contains(errorUnit)) {
-      errorUnit.classList.add('hidden');
-    }
   });
 };
 

@@ -9,6 +9,7 @@ const socialCaption = bigPicture.querySelector('.social__caption');
 const closeButton = bigPicture.querySelector('.big-picture__cancel');
 const socialCommentCount = bigPicture.querySelector('.social__comment-count');
 const socialCommentsLoader = bigPicture.querySelector('.comments-loader');
+const STEP_VALUE = 5;
 
 const getFullsizeModal = (url, likes, comments, description) => {
   const commentsLength = comments.length;
@@ -28,8 +29,8 @@ const getFullsizeModal = (url, likes, comments, description) => {
 
   const updateCommentsCounterValue = () => {
     const commentsRemainder = commentsLength - commentsCounter;
-    if (commentsRemainder >= 5) {
-      commentsCounter = commentsCounter + 5;
+    if (commentsRemainder >= STEP_VALUE) {
+      commentsCounter = commentsCounter + STEP_VALUE;
     } else {
       commentsCounter =  commentsCounter + commentsRemainder;
     }
@@ -107,6 +108,7 @@ const onPopupEscKeydown = (evt) => {
     evt.preventDefault();
     bigPicture.classList.add('hidden');
     body.classList.remove('modal-open');
+    document.removeEventListener('keydown', onPopupEscKeydown);
   }
 };
 

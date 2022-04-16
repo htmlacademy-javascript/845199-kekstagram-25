@@ -29,7 +29,7 @@ function sliderInit () {
       step: 1,
       connect: 'lower',
     });
-    effectSlider.setAttribute('disabled', true);
+    effectSlider.setAttribute('disabled', '');
   }
 }
 
@@ -139,7 +139,7 @@ function onEffectSliderUpdate () {
 
       else if (imagePicturePreview.className === 'effects__preview--none') {
         effectLevel.classList.add('hidden');
-        effectSlider.setAttribute('disabled', true);
+        effectSlider.setAttribute('disabled', '');
         imagePicturePreview.style.filter = 'none';
       }
     });
