@@ -9,8 +9,8 @@ const renderPhotos = (similarPhotos) => {
   const pictures = document.querySelectorAll('.picture');
 
   const removeAllPictures = () => {
-    for (let i = 0; i < pictures.length; i++) {
-      pictures[i].remove();
+    for (const picture of pictures) {
+      picture.remove();
     }
   };
 
