@@ -93,10 +93,10 @@ const activateValidationForm = () => {
   });
 
   const pristine = new Pristine(form, {
-    classTo: 'img-upload__text',
-    errorTextParent: 'img-upload__text',
+    classTo: 'img-upload__text-container',
+    errorTextParent: 'img-upload__text-container',
     errorTextTag: 'div',
-    errorTextClass: 'text__error-text',
+    errorTextClass: 'img-upload__error',
   });
 
 
