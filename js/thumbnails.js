@@ -1,4 +1,4 @@
-import {getFullsizeModal, openUserModal, closeUserModal, closeButton} from './fullsize-modal.js';
+import {openUserModal} from './fullsize-modal.js';
 
 const renderPhotos = (similarPhotos) => {
 
@@ -8,27 +8,19 @@ const renderPhotos = (similarPhotos) => {
   const picturesList = document.querySelector('.pictures'); // В этот список мы в итоге добавим содержимое временного "хранилища"
   const pictures = document.querySelectorAll('.picture');
 
-  const removeAllPictures = () => {
-    for (const picture of pictures) {
-      picture.remove();
-    }
-  };
-
-  removeAllPictures();
+  pictures.forEach((picture) => {
+    picture.remove();
+  });
 
   similarPhotos.forEach(({url, likes, comments, description}) => {
     const similarPicture =  templatePicture.cloneNode(true);
+
     similarPicture.querySelector('.picture__img').src = url;
     similarPicture.querySelector('.picture__likes').textContent = likes;
     similarPicture.querySelector('.picture__comments').textContent = comments.length;
 
     similarPicture.addEventListener('click', () => {
-      getFullsizeModal(url, likes, comments, description);
-      openUserModal();
-
-      closeButton.addEventListener('click', () => {
-        closeUserModal ();
-      });
+      openUserModal(url, likes, comments, description);
     });
 
     fragment.appendChild(similarPicture);

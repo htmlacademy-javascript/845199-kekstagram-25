@@ -52,7 +52,7 @@ const activateFilters = (similarPhotos) => {
     } else if (evt.target.id ==='filter-default') {
       defaultFilter.classList.add('img-filters__button--active');
       randomFilter.classList.remove('img-filters__button--active');
-      defaultFilter.classList.remove('img-filters__button--active');
+      discussedFilter.classList.remove('img-filters__button--active');
 
       renderPhotos(similarPhotos);
     }
