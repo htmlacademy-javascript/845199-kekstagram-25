@@ -12,14 +12,14 @@ const errorButton = errorUnit.querySelector('.error__button');
 const onSuccessMessageEscKeyDown = (evt) => {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
-    successUnit.classList.add('hidden');
+    closeSuccessMessage ();
   }
 };
 
 const onErrorMessageEscKeyDown = (evt) => {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
-    errorUnit.classList.add('hidden');
+    closeErrorMessage ();
   }
 };
 
@@ -36,7 +36,7 @@ const createErrorMessage = () => {
 createSuccessMessage();
 createErrorMessage();
 
-const closeSuccessMessage = () => {
+function closeSuccessMessage () {
   successUnit.classList.add('hidden');
 
   document.removeEventListener('keydown', onSuccessMessageEscKeyDown);
@@ -44,7 +44,7 @@ const closeSuccessMessage = () => {
   successButton.removeEventListener('click', () => {
     closeSuccessMessage ();
   });
-};
+}
 
 const openSuccessMessage = () => {
   successUnit.classList.remove('hidden');
@@ -63,13 +63,13 @@ const openSuccessMessage = () => {
   }, {once: true});
 };
 
-const closeErrorMessage = () => {
+function closeErrorMessage () {
   errorUnit.classList.add('hidden');
   document.removeEventListener('keydown', onErrorMessageEscKeyDown);
   errorButton.removeEventListener('click', () => {
     closeErrorMessage ();
   });
-};
+}
 
 const openErrorMessage = () => {
   errorUnit.classList.remove('hidden');
