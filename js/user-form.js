@@ -9,6 +9,7 @@ const SCALE_STEP_VALUE = 25;
 const DEFAULT_VALUE = 100;
 const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 const SPLITTER = ' ';
+const MAX_HASHTAGS_AMOUNT = 5;
 
 const imagePicturePreview = document.querySelector('.img-upload__preview img');
 const uploadFile = document.querySelector('#upload-file');
@@ -27,7 +28,6 @@ const hashtagsRepeatValidationErrorMessage = 'Хэштеги не должны �
 const textDescriptionValidationErrorMessage = 'Не более 140 знаков';
 
 const activateValidationForm = () => {
-
   uploadFile.addEventListener('change', () => {
     const file = uploadFile.files[0];
     const fileName = file.name.toLowerCase();
@@ -92,10 +92,10 @@ const activateValidationForm = () => {
   });
 
   const pristine = new Pristine(form, {
-    classTo: 'img-upload__text',
-    errorTextParent: 'img-upload__text',
+    classTo: 'img-upload__text-container',
+    errorTextParent: 'img-upload__text-container',
     errorTextTag: 'div',
-    errorTextClass: 'text__error-text',
+    errorTextClass: 'img-upload__error',
   });
 
 
@@ -135,9 +135,9 @@ const activateValidationForm = () => {
   setUserFormSubmit(onFormCloseUpload);
 
   function validateSingleHashtag(value) {
-    const resultArray = value.split(SPLITTER);
+    const resultData = value.split(SPLITTER);
     const re = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
-    const result = resultArray.every((item) => re.test(item));
+    const result = resultData.every((item) => re.test(item));
 
     return value !== '' ? result : true;
   }
@@ -149,16 +149,16 @@ const activateValidationForm = () => {
   );
 
   function validateHashtagsRepeat(value) {
-    const resultArray = value.toLowerCase().split(SPLITTER);
-    const uniqArray = [];
-    for (let i = 0; i < resultArray.length; i++) {
-      if (uniqArray.includes(resultArray[i])) {
+    const resultData = value.toLowerCase().split(SPLITTER);
+    const uniqHashtags = [];
+    for (const resultDataElement of resultData) {
+      if (uniqHashtags.includes(resultDataElement)) {
         return false;
       }
 
-      uniqArray.push(resultArray[i]);
+      uniqHashtags.push(resultDataElement);
     }
-    return resultArray;
+    return resultData;
   }
 
   pristine.addValidator(
@@ -170,7 +170,7 @@ const activateValidationForm = () => {
   function validateHashtagsCount(value) {
     const result = value.split(SPLITTER);
 
-    return !(result.length > 5);
+    return result.length <= MAX_HASHTAGS_AMOUNT;
   }
 
   pristine.addValidator(

@@ -9,17 +9,25 @@ const successButton = successUnit.querySelector('.success__button');
 const errorUnit = templateError.cloneNode(true);
 const errorButton = errorUnit.querySelector('.error__button');
 
-const onSuccessMessageEscKeyDown = (evt) => {
+const closeSuccessMessage = () => {
+  successUnit.classList.add('hidden');
+
+  document.removeEventListener('keydown', onSuccessMessageEscKeyDown);
+
+  successButton.removeEventListener('click', onSuccessButtonClick);
+};
+
+function onSuccessMessageEscKeyDown (evt) {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
-    successUnit.classList.add('hidden');
+    closeSuccessMessage ();
   }
-};
+}
 
 const onErrorMessageEscKeyDown = (evt) => {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
-    errorUnit.classList.add('hidden');
+    closeErrorMessage ();
   }
 };
 
@@ -36,55 +44,47 @@ const createErrorMessage = () => {
 createSuccessMessage();
 createErrorMessage();
 
-const closeSuccessMessage = () => {
-  successUnit.classList.add('hidden');
-
-  document.removeEventListener('keydown', onSuccessMessageEscKeyDown);
-
-  successButton.removeEventListener('click', () => {
-    closeSuccessMessage ();
-  });
-};
-
 const openSuccessMessage = () => {
   successUnit.classList.remove('hidden');
   document.addEventListener('keydown', onSuccessMessageEscKeyDown);
   hashtags.value = '';
   textDescription.value = '';
-  successButton.addEventListener('click', () => {
-    closeSuccessMessage ();
-  });
+  successButton.addEventListener('click', onSuccessButtonClick);
 
   window.addEventListener('click', (event) => {
     event.stopPropagation();
     if (event.target.contains(successUnit)) {
       successUnit.classList.add('hidden');
     }
-  });
+  }, {once: true});
 };
 
-const closeErrorMessage = () => {
+function closeErrorMessage () {
   errorUnit.classList.add('hidden');
   document.removeEventListener('keydown', onErrorMessageEscKeyDown);
-  errorButton.removeEventListener('click', () => {
-    closeErrorMessage ();
-  });
-};
+  errorButton.removeEventListener('click', onErrorButtonClick);
+}
 
 const openErrorMessage = () => {
   errorUnit.classList.remove('hidden');
   document.addEventListener('keydown', onErrorMessageEscKeyDown);
 
-  errorButton.addEventListener('click', () => {
-    closeErrorMessage ();
-  });
+  errorButton.addEventListener('click', onErrorButtonClick);
 
   window.addEventListener('click', (event) => {
     event.stopPropagation();
     if (event.target.contains(errorUnit)) {
       errorUnit.classList.add('hidden');
     }
-  });
+  }, {once: true});
 };
+
+function onSuccessButtonClick () {
+  closeSuccessMessage ();
+}
+
+function onErrorButtonClick () {
+  closeErrorMessage ();
+}
 
 export{openErrorMessage, openSuccessMessage};

@@ -1,8 +1,10 @@
 import {showAlert} from './util.js';
 import {openErrorMessage, openSuccessMessage} from './messages.js';
 
+const URL = 'https://25.javascript.pages.academy/kekstagram';
+
 const getData = (onSuccess) => {
-  fetch('https://25.javascript.pages.academy/kekstagram/data')
+  fetch(`${URL}/data`)
     .then((response) => response.json())
     .then((similarPhotos) => {
       if (similarPhotos.length) {
@@ -18,13 +20,10 @@ const getData = (onSuccess) => {
 
 const sendData = (onSuccess, onFail, FormData) => {
   fetch(
-    'https://25.javascript.pages.academy/kekstagram',
-    {
+    URL, {
       method: 'POST',
-      type: 'multipart/form-data',
       body: FormData,
-    },
-  )
+    })
 
     .then((response) => {
       if (response.ok) {
