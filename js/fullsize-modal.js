@@ -8,7 +8,7 @@ const likesCount = bigPicture.querySelector('.likes-count');
 const socialCaption = bigPicture.querySelector('.social__caption');
 const closeButton = bigPicture.querySelector('.big-picture__cancel');
 
-const createModal = (url, likes, comments, description) => {
+const createModal = (url, likes, description) => {
   bigPictureImage.src = url;
   likesCount.textContent = likes;
   socialCaption.textContent = description;
@@ -26,7 +26,7 @@ const onModalClose = () => {
 };
 
 function openUserModal (url, likes, comments, description) {
-  createModal(url, likes, comments, description);
+  createModal(url, likes, description);
   createComments(comments);
 
   bigPicture.classList.remove('hidden');

@@ -1,7 +1,6 @@
 import {openUserModal} from './fullsize-modal.js';
 
 const renderPhotos = (similarPhotos) => {
-
   const templateFragment = document.querySelector('#picture').content; // Находим фрагмент HTML документа с содержимым темплейта
   const templatePicture = templateFragment.querySelector('.picture'); // Находим необходимую часть в фрагменте, которую будем "размножать"
   const fragment = document.createDocumentFragment(); // Создаем временное "хранилище", куда будем "складывать" создаваемые по шаблону картинки

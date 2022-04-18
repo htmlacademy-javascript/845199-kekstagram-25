@@ -28,7 +28,6 @@ const hashtagsRepeatValidationErrorMessage = 'Хэштеги не должны �
 const textDescriptionValidationErrorMessage = 'Не более 140 знаков';
 
 const activateValidationForm = () => {
-
   uploadFile.addEventListener('change', () => {
     const file = uploadFile.files[0];
     const fileName = file.name.toLowerCase();
@@ -152,12 +151,12 @@ const activateValidationForm = () => {
   function validateHashtagsRepeat(value) {
     const resultData = value.toLowerCase().split(SPLITTER);
     const uniqHashtags = [];
-    for (let i = 0; i < resultData.length; i++) {
-      if (uniqHashtags.includes(resultData[i])) {
+    for (const resultDataElement of resultData) {
+      if (uniqHashtags.includes(resultDataElement)) {
         return false;
       }
 
-      uniqHashtags.push(resultData[i]);
+      uniqHashtags.push(resultDataElement);
     }
     return resultData;
   }
@@ -171,7 +170,7 @@ const activateValidationForm = () => {
   function validateHashtagsCount(value) {
     const result = value.split(SPLITTER);
 
-    return !(result.length > MAX_HASHTAGS_AMOUNT);
+    return result.length <= MAX_HASHTAGS_AMOUNT;
   }
 
   pristine.addValidator(
