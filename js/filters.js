@@ -16,7 +16,7 @@ const getRandomImages = (similarPhotos) => {
   for (let i = 0; i < RANDOM_IMAGES_AMOUNT; i++) {
     let random = getRandomArrayElement(similarPhotos);
 
-    if (randomImagesList.includes(random)) {
+    while (randomImagesList.includes(random)) {
       random = getRandomArrayElement(similarPhotos);
     }
 
